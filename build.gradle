@@ -12,6 +12,8 @@ repositories {
 
 dependencies {
     compile 'org.bouncycastle:bcprov-jdk15on:1.57'
+    compile 'org.bouncycastle:bcpkix-jdk15on:1.57'
+    compile 'org.bitcoinj:bitcoinj-core:0.12'
 
     // Use the latest Groovy version for Spock testing
     testCompile 'org.codehaus.groovy:groovy-all:2.4.11'

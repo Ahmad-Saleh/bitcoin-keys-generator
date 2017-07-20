@@ -3,8 +3,8 @@ package com.ahmadsaleh.bitcoinkeys
 import spock.lang.Specification
 
 /**
-*  Created by Ahmad Y. Saleh on 17/07/17.
-*/
+ *  Created by Ahmad Y. Saleh on 17/07/17.
+ */
 class ECDSAEncryptionUtilsTest extends Specification {
 
     def "given ECDSAEncryptionUtils, when generating key pair, then non-null is returned"() {
