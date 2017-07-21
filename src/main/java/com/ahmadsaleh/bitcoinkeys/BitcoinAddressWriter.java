@@ -26,7 +26,7 @@ public class BitcoinAddressWriter extends BufferedWriter {
     }
 
     public void write(PublicKey publicKey) throws IOException {
-        byte[] sha256Hash = sha256Hash(asByteArray(publicKey));
+        byte[] sha256Hash = sha256Hash(KeysConversionUtils.asByteArray(publicKey));
         byte[] ripemd160Hash = ripemd160Hash(sha256Hash);
         byte[] versioned = addVersion(ripemd160Hash, MAIN_BITCOIN_NETWORK_VERSION);
         byte[] firstSha256Hash = sha256Hash(versioned);
@@ -35,16 +35,6 @@ public class BitcoinAddressWriter extends BufferedWriter {
         byte[] address = join(versioned, checkSum);
         String base58Address = Base58.encode(address);
         write(base58Address);
-    }
-
-    private byte[] asByteArray(PublicKey publicKey) {
-        try {
-            ECPublicKeyParameters ecPublicKeyParameters
-                    = (ECPublicKeyParameters) ECUtil.generatePublicKeyParameter(publicKey);
-            return ecPublicKeyParameters.getQ().getEncoded(false);
-        } catch (InvalidKeyException e) {
-            throw new IllegalStateException("Error while converting key!", e);
-        }
     }
 
     private byte[] join(byte[] firstPart, byte[] secondPart) {

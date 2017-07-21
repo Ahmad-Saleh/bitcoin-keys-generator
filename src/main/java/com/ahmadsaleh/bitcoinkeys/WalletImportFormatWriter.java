@@ -24,7 +24,7 @@ public class WalletImportFormatWriter extends BufferedWriter {
     }
 
     public void write(PrivateKey privateKey) throws IOException {
-        byte[] versioned = addVersion(asByteArray(privateKey), MAIN_BITCOIN_NETWORK_VERSION);
+        byte[] versioned = addVersion(KeysConversionUtils.asByteArray(privateKey), MAIN_BITCOIN_NETWORK_VERSION);
         byte[] firstSha256Hash = sha256Hash(versioned);
         byte[] secondSha256Hash = sha256Hash(firstSha256Hash);
         byte[] checkSum = Arrays.copyOfRange(secondSha256Hash, 0, 4);
@@ -54,21 +54,5 @@ public class WalletImportFormatWriter extends BufferedWriter {
         System.arraycopy(data, 0, result, 1, data.length);
         result[0] = version;
         return result;
-    }
-
-    private byte[] asByteArray(PrivateKey privateKey) {
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            baos.write(Utils.bigIntegerToBytes(((BCECPrivateKey) privateKey).getS(), 32));
-            return baos.toByteArray();
-        } catch (IOException e) {
-            throw new IllegalStateException("Error while converting key!", e);
-        }
-    }
-
-    public static void main(String[] args) throws IOException {
-        StringWriter stringWriter = new StringWriter();
-        new WalletImportFormatWriter(stringWriter).write(KeysConversionUtils.asPrivateKey("0C28FCA386C7A227600B2FE50B7CAE11EC86D3BF1FBE471BE89827E19D72AA1D"));
-        System.out.println(stringWriter.toString());
     }
 }

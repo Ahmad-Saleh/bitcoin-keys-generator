@@ -27,17 +27,6 @@ import java.security.spec.*;
  */
 public class KeysConversionUtils {
 
-    public static void main(String[] args) {
-        KeyPair keyPair = ECDSAEncryptionUtils.generateKeyPair();
-        String privateHex = asHexString(keyPair.getPrivate());
-        String publicHex = asHexString(keyPair.getPublic());
-        System.out.printf("private hex: %s \n", privateHex);
-        System.out.printf("public hex: %s \n", publicHex);
-        PrivateKey privateKey = asPrivateKey(privateHex);
-        PublicKey publicKey = asPublicKey(publicHex);
-        System.out.println(ECDSAEncryptionUtils.verify("ahmad", ECDSAEncryptionUtils.sign("ahmad", privateKey), publicKey));
-    }
-
     public static byte[] asByteArray(PublicKey publicKey) {
         try {
             ECPublicKeyParameters ecPublicKeyParameters
@@ -58,6 +47,14 @@ public class KeysConversionUtils {
         }
     }
 
+    public static PrivateKey asPrivateKey(String hexString) {
+        return asPrivateKey(Hex.decode(hexString));
+    }
+
+    public static PublicKey asPublicKey(String hexString) {
+        return asPublicKey(Hex.decode(hexString));
+    }
+
     public static String asHexString(PrivateKey key) {
         try {
             return new String(Hex.encode(asByteArray(key)), "UTF-8").toUpperCase();
@@ -75,26 +72,9 @@ public class KeysConversionUtils {
     }
 
     public static PrivateKey asPrivateKey(byte[] keyBytes) {
-//        try {
-//            KeyFactory kf = KeyFactory.getInstance("ECDSA", new BouncyCastleProvider());
-//            return kf.generatePrivate(new PKCS8EncodedKeySpec(keyBytes));
-//        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-//            throw new IllegalStateException("Error while building key!", e);
-//        }
-
-//        ECParameterSpec spec = ECNamedCurveTable.getParameterSpec("secp256k1");
-//        ECNamedCurveSpec params = new ECNamedCurveSpec("secp256k1", spec.getCurve(), spec.getG(), spec.getN());
-//        ECPrivateKeySpec privateKeySpec = new ECPrivateKeySpec(new BigInteger(keyBytes), params);
-//        try {
-//            KeyFactory keyFactory = KeyFactory.getInstance("ECDSA", new BouncyCastleProvider());
-//            return keyFactory.generatePrivate(privateKeySpec);
-//        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-//            throw new IllegalStateException("Error while building key!", e);
-//        }
-
         X9ECParameters ecCurve = org.bouncycastle.asn1.x9.ECNamedCurveTable.getByName("secp256k1");
         java.security.spec.ECParameterSpec ecParameterSpec = new ECNamedCurveSpec("secp256k1", ecCurve.getCurve(), ecCurve.getG(), ecCurve.getN());
-        ECPrivateKeySpec privateKeySpec = new ECPrivateKeySpec(new BigInteger(keyBytes), ecParameterSpec);
+        ECPrivateKeySpec privateKeySpec = new ECPrivateKeySpec(new BigInteger(1, keyBytes), ecParameterSpec);
         try {
             KeyFactory keyFactory = KeyFactory.getInstance("ECDSA", new BouncyCastleProvider());
             return keyFactory.generatePrivate(privateKeySpec);
@@ -104,13 +84,6 @@ public class KeysConversionUtils {
     }
 
     public static PublicKey asPublicKey(byte[] keyBytes) {
-//        try {
-//            KeyFactory kf = KeyFactory.getInstance("ECDSA", new BouncyCastleProvider());
-//            return kf.generatePublic(new X509EncodedKeySpec(keyBytes));
-//        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-//            throw new IllegalStateException("Error while building key!", e);
-//        }
-
         try {
             ECParameterSpec spec = ECNamedCurveTable.getParameterSpec("secp256k1");
             KeyFactory kf = KeyFactory.getInstance("ECDSA", new BouncyCastleProvider());
@@ -124,11 +97,4 @@ public class KeysConversionUtils {
         }
     }
 
-    public static PrivateKey asPrivateKey(String hexString) {
-        return asPrivateKey(Hex.decode(hexString));
-    }
-
-    public static PublicKey asPublicKey(String hexString) {
-        return asPublicKey(Hex.decode(hexString));
-    }
 }
