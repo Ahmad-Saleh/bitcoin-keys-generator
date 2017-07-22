@@ -1,5 +1,6 @@
 package com.ahmadsaleh.bitcoinkeys
 
+import com.ahmadsaleh.bitcoinkeys.writer.BitcoinAddressWriter
 import spock.lang.Specification
 import spock.lang.Unroll
 

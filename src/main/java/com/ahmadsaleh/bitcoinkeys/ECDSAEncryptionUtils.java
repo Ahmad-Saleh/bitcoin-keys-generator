@@ -10,7 +10,11 @@ import java.security.*;
 /**
  * Created by Ahmad Y. Saleh on 7/18/17.
  */
-public class ECDSAEncryptionUtils {
+public final class ECDSAEncryptionUtils {
+
+    private ECDSAEncryptionUtils() {
+        throw new UnsupportedOperationException("utility class is not supposed to be used this way!");
+    }
 
     public static KeyPair generateKeyPair(){
         try {
