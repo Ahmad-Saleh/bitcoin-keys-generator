@@ -1,8 +1,6 @@
 package com.ahmadsaleh.bitcoinkeys.console;
 
-import com.ahmadsaleh.bitcoinkeys.console.processors.ExitCommandProcessor;
-import com.ahmadsaleh.bitcoinkeys.console.processors.GenerateCommandProcessor;
-import com.ahmadsaleh.bitcoinkeys.console.processors.UnrecognizedCommadProcessor;
+import com.ahmadsaleh.bitcoinkeys.console.processors.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +13,8 @@ public class CommandProcessorFactory {
     static {
         registerProcessor(new ExitCommandProcessor());
         registerProcessor(new GenerateCommandProcessor());
+        registerProcessor(new EmptyCommandProcessor());
+        registerProcessor(new DecryptCommandProcessor());
     }
 
     private CommandProcessorFactory() {

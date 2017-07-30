@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Class-Path: orchid-1.0.jar commons-collections4-4.1.jar guava-16.0.1.j
+ ar junit-4.11.jar commons-logging-1.2.jar hamcrest-core-1.3.jar junit
+ -4.12.jar bitcoinj-core-0.12.jar json-20140107.jar apache-mime4j-core
+ -0.7.1.jar httpcore-4.3.2.jar groovy-all-2.4.11.jar slf4j-api-1.7.7.j
+ ar logback-classic-1.0.9.jar guava-13.0.1.jar jcip-annotations-1.0.ja
+ r httpclient-4.2.1.jar bcprov-jdk15on-1.57.jar scrypt-1.4.0.jar httpm
+ ime-4.1.jar spock-core-1.0-groovy-2.4.jar logback-core-1.0.9.jar slf4
+ j-simple-1.7.7.jar jsr305-2.0.1.jar bcpkix-jdk15on-1.57.jar protobuf-
+ java-2.5.0.jar core-1.51.0.0.jar commons-lang3-3.6.jar
+Main-Class: com.ahmadsaleh.bitcoinkeys.console.Main
+

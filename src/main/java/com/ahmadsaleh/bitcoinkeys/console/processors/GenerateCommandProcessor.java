@@ -3,6 +3,7 @@ package com.ahmadsaleh.bitcoinkeys.console.processors;
 import com.ahmadsaleh.bitcoinkeys.ECDSAEncryptionUtils;
 import com.ahmadsaleh.bitcoinkeys.console.CommandOption;
 import com.ahmadsaleh.bitcoinkeys.console.CommandProcessor;
+import com.ahmadsaleh.bitcoinkeys.console.ConsoleUtils;
 import com.ahmadsaleh.bitcoinkeys.writer.BitcoinAddressWriter;
 import com.ahmadsaleh.bitcoinkeys.writer.WalletImportFormatWriter;
 import net.bither.bitherj.crypto.bip38.Bip38;
@@ -20,12 +21,12 @@ public class GenerateCommandProcessor implements CommandProcessor {
     @Override
     public void process(List<CommandOption> options) {
         try {
+            CharSequence password = ConsoleUtils.requestNewPassword();
             KeyPair keyPair = ECDSAEncryptionUtils.generateKeyPair();
             String bitcoinAddress = toBitcoinAddress(keyPair.getPublic());
             String wifPrivateKey = toWalletImportFormat(keyPair.getPrivate());
             System.out.printf("bitcoin address: %s\n", bitcoinAddress);
-            System.out.printf("private key (WIF): %s\n", wifPrivateKey);
-            System.out.printf("encrypted private: %s\n", Bip38.encryptNoEcMultiply("koko", wifPrivateKey));
+            System.out.printf("encrypted private: %s\n", Bip38.encryptNoEcMultiply(password, wifPrivateKey));
         } catch (IOException e) {
             throw new IllegalStateException("Error while converting keys", e);
         } catch (InterruptedException | AddressFormatException e) {
@@ -53,6 +54,6 @@ public class GenerateCommandProcessor implements CommandProcessor {
 
     @Override
     public String getCommand() {
-        return "gen";
+        return "generate";
     }
 }

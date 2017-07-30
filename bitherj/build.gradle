@@ -35,6 +35,5 @@ dependencies {
     testCompile 'org.apache.james:apache-mime4j-core:0.7.1@jar'
     testCompile 'ch.qos.logback:logback-classic:1.0.9@jar'
     testCompile 'ch.qos.logback:logback-core:1.0.9@jar'
-    testCompile 'commons-logging:commons-logging:1.2@jar'
 }
 

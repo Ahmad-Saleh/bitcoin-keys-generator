@@ -1,10 +1,10 @@
 package com.ahmadsaleh.bitcoinkeys.console;
 
-import com.ahmadsaleh.bitcoinkeys.console.CommandOption;
-import com.ahmadsaleh.bitcoinkeys.console.CommandProcessorFactory;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 /**
  * Created by Ahmad Y. Saleh on 7/22/17.
@@ -26,7 +26,8 @@ public class Main {
     }
 
     private static String getFunction(String command) {
-        return StringUtils.split(command)[0];
+        String[] splitted = StringUtils.split(command);
+        return splitted.length > 0 ? splitted[0] : "";
     }
 
     private static List<CommandOption> parseOptions(String command) {
@@ -35,9 +36,9 @@ public class Main {
         if (splitted.length > 1 && !splitted[1].startsWith("-")) {
             throw new InvalidCommandStructureException("Invalid command, options should start with '-'");
         }
+        CommandOption option = null;
         for (int i = 1; i < splitted.length; i++) {
             String part = splitted[i];
-            CommandOption option = null;
             if (part.startsWith("-")) {
                 option = new CommandOption();
                 optionList.add(option);
