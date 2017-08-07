@@ -1,5 +1,8 @@
 package com.ahmadsaleh.bitcoinkeys;
 
+import com.ahmadsaleh.bitcoinkeys.writer.BitcoinAddressWriter;
+import org.bitcoinj.core.AddressFormatException;
+import org.bitcoinj.core.Base58;
 import org.bitcoinj.core.Utils;
 import org.bouncycastle.asn1.x9.X9ECParameters;
 import org.bouncycastle.crypto.params.ECPublicKeyParameters;
@@ -14,6 +17,7 @@ import org.bouncycastle.util.encoders.Hex;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.math.BigInteger;
 import java.security.*;
 import java.security.interfaces.ECPublicKey;
@@ -21,6 +25,11 @@ import java.security.spec.ECPoint;
 import java.security.spec.ECPrivateKeySpec;
 import java.security.spec.ECPublicKeySpec;
 import java.security.spec.InvalidKeySpecException;
+
+import static com.ahmadsaleh.bitcoinkeys.ByteArrayUtils.addToStart;
+import static com.ahmadsaleh.bitcoinkeys.ByteArrayUtils.copyOfRange;
+import static com.ahmadsaleh.bitcoinkeys.HashingUtils.sha256Hash;
+import static com.google.common.primitives.Bytes.concat;
 
 /**
  * Created by Ahmad Y. Saleh on 7/19/17.
@@ -85,14 +94,35 @@ public final class KeysConversionUtils {
         }
     }
 
-    public static class KeyConversionException extends RuntimeException{
+    public static class KeyConversionException extends RuntimeException {
 
-        public KeyConversionException(String message){
+        public KeyConversionException(String message) {
             super(message);
         }
 
-        public KeyConversionException(String message, Throwable t){
+        public KeyConversionException(String message, Throwable t) {
             super(message, t);
+        }
+    }
+
+    public static String toBitcoinAddress(PublicKey publicKey) {
+        try (StringWriter stringWriter = new StringWriter();
+             BitcoinAddressWriter addressWriter = new BitcoinAddressWriter(stringWriter);) {
+            addressWriter.write(publicKey);
+            addressWriter.flush();
+            return stringWriter.toString();
+        } catch (IOException e) {
+            throw new IllegalStateException("Error while converting keys", e);
+        }
+    }
+
+    public static PrivateKey toPrivateKey(String walletImportFormat){
+        try {
+            byte[] decoded = Base58.decode(walletImportFormat);
+            byte[] trimmedBytes = ByteArrayUtils.copyOfRange(decoded, 1, decoded.length - 4);
+            return KeysConversionUtils.asPrivateKey(trimmedBytes);
+        } catch (AddressFormatException e) {
+            throw new IllegalStateException("Error while converting keys", e);
         }
     }
 }
