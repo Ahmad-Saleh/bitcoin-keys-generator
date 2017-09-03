@@ -60,14 +60,6 @@ public final class KeysConversionUtils {
         }
     }
 
-    public static PrivateKey asPrivateKey(String hexString) {
-        return asPrivateKey(Hex.decode(hexString));
-    }
-
-    public static PublicKey asPublicKey(String hexString) {
-        return asPublicKey(Hex.decode(hexString));
-    }
-
     public static PrivateKey asPrivateKey(byte[] keyBytes) {
         X9ECParameters ecCurve = org.bouncycastle.asn1.x9.ECNamedCurveTable.getByName("secp256k1");
         java.security.spec.ECParameterSpec ecParameterSpec = new ECNamedCurveSpec("secp256k1", ecCurve.getCurve(), ecCurve.getG(), ecCurve.getN());
